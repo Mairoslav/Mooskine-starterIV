@@ -23,6 +23,8 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
         navigationItem.rightBarButtonItem = editButtonItem
         updateEditButtonState()
         
+        // after adding below part of code there is error cannot find type 'Note' in scope.
+        // is it because I did not correctly create the relationships in 'mooskineDataModel'?
         let notebook:Note
     }
 
