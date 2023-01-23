@@ -58,7 +58,7 @@ class NotesListViewController: UIViewController, UITableViewDataSource {
 
     // Deletes the `Note` at the specified index path
     func deleteNote(at indexPath: IndexPath) {
-        // notebook.removeNote(at: indexPath.row) // deleted based on Q&A suggestion
+        // notebook.removeNote(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
         if numberOfNotes == 0 {
             setEditing(false, animated: true)
@@ -92,7 +92,7 @@ class NotesListViewController: UIViewController, UITableViewDataSource {
 
         // Configure cell
         cell.textPreviewLabel.text = aNote.text
-        cell.dateLabel.text = dateFormatter.string(from: aNote.creationDate)
+        cell.dateLabel.text = dateFormatter.string(from: aNote.creationDate ?? Date())
 
         return cell
     }
@@ -106,7 +106,7 @@ class NotesListViewController: UIViewController, UITableViewDataSource {
 
     // Helpers
 
-    var numberOfNotes: Int { return notebook.notes.count }
+    var numberOfNotes: Int { return notebook.notes?.count ?? 0 }
 
     func note(at indexPath: IndexPath) -> Note {
         return notebook.notes[indexPath.row]

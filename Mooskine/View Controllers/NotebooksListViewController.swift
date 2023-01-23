@@ -80,7 +80,8 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
 
     /// Adds a new notebook to the end of the `notebooks` array
     func addNotebook(name: String) {
-        let notebook = Notebook(name: name)
+        // let notebook = Notebook(name: name)
+        let notebook = Notebook()
         notebooks.append(notebook)
         tableView.insertRows(at: [IndexPath(row: numberOfNotebooks - 1, section: 0)], with: .fade)
         updateEditButtonState()
