@@ -109,8 +109,12 @@ class NotesListViewController: UIViewController, UITableViewDataSource {
     var numberOfNotes: Int { return notebook.notes?.count ?? 0 }
 
     func note(at indexPath: IndexPath) -> Note {
-        return notebook.notes[indexPath.row]
+        // return notebook.notes[indexPath.row]
+        // Since the notes as an NSSet cannot be indexed, comment out above line and you can take the `allObjects` like this:
+        return notebook.notes?.allObjects[indexPath.row] as! Note
     }
+    
+    // let orderedPlayers = (game.players!.allObjects as! [Player]).sort { $0.name < $1.name }
 
     // -------------------------------------------------------------------------
     // MARK: - Navigation
