@@ -21,6 +21,7 @@
 		03B2699F1F2F8AAA00C7433C /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B269961F2F837C00C7433C /* NoteCell.swift */; };
 		03B269A01F2F8AAD00C7433C /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B269981F2F837C00C7433C /* Cell.swift */; };
 		44CF00912975DD8E003A469C /* mooskineDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 44CF008F2975DD8E003A469C /* mooskineDataModel.xcdatamodeld */; };
+		44CF0093297DC0ED003A469C /* Notebook+Extra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44CF0092297DC0ED003A469C /* Notebook+Extra.swift */; };
 		A76557E71F8BC1FB00EFF9B8 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A76557E51F8BC1AC00EFF9B8 /* OpenSans-Bold.ttf */; };
 		A76557E81F8BC1FB00EFF9B8 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A76557E61F8BC1AC00EFF9B8 /* OpenSans-Regular.ttf */; };
 		A76557E91F8BC1FB00EFF9B8 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A76557E41F8BC1AC00EFF9B8 /* OpenSans-Semibold.ttf */; };
@@ -55,6 +56,7 @@
 		03B269961F2F837C00C7433C /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		03B269981F2F837C00C7433C /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		44CF00902975DD8E003A469C /* mooskineDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mooskineDataModel.xcdatamodel; sourceTree = "<group>"; };
+		44CF0092297DC0ED003A469C /* Notebook+Extra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notebook+Extra.swift"; sourceTree = "<group>"; };
 		A76557E41F8BC1AC00EFF9B8 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
 		A76557E51F8BC1AC00EFF9B8 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		A76557E61F8BC1AC00EFF9B8 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				03B2698D1F2F831700C7433C /* Note.swift */,
 				03B2698E1F2F831700C7433C /* Notebook.swift */,
 				44CF008F2975DD8E003A469C /* mooskineDataModel.xcdatamodeld */,
+				44CF0092297DC0ED003A469C /* Notebook+Extra.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				03B2699A1F2F8A9C00C7433C /* Notebook.swift in Sources */,
 				03B2699C1F2F8AA100C7433C /* NoteDetailsViewController.swift in Sources */,
 				03B269A01F2F8AAD00C7433C /* Cell.swift in Sources */,
+				44CF0093297DC0ED003A469C /* Notebook+Extra.swift in Sources */,
 				03B2699D1F2F8AA100C7433C /* NotesListViewController.swift in Sources */,
 				03B269991F2F8A9C00C7433C /* Note.swift in Sources */,
 				44CF00912975DD8E003A469C /* mooskineDataModel.xcdatamodeld in Sources */,

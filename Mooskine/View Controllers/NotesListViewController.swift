@@ -51,14 +51,14 @@ class NotesListViewController: UIViewController, UITableViewDataSource {
 
     // Adds a new `Note` to the end of the `notebook`'s `notes` array
     func addNote() {
-        notebook.addNote()
+        // notebook.addNote() // deleted based on Q&A suggestion
         tableView.insertRows(at: [IndexPath(row: numberOfNotes - 1, section: 0)], with: .fade)
         updateEditButtonState()
     }
 
     // Deletes the `Note` at the specified index path
     func deleteNote(at indexPath: IndexPath) {
-        notebook.removeNote(at: indexPath.row)
+        // notebook.removeNote(at: indexPath.row) // deleted based on Q&A suggestion
         tableView.deleteRows(at: [indexPath], with: .fade)
         if numberOfNotes == 0 {
             setEditing(false, animated: true)

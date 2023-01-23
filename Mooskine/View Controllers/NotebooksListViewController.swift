@@ -25,7 +25,7 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
         
         // after adding below part of code there is error cannot find type 'Note' in scope.
         // is it because I did not correctly create the relationships in 'mooskineDataModel'?
-        let notebook:Notebook 
+        let notebook: Notebook
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -122,8 +122,8 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
 
         // Configure cell
         cell.nameLabel.text = aNotebook.name
-        let pageString = aNotebook.notes.count == 1 ? "page" : "pages"
-        cell.pageCountLabel.text = "\(aNotebook.notes.count) \(pageString)"
+        let pageString = aNotebook.notes?.count == 1 ? "page" : "pages"
+        cell.pageCountLabel.text = "\(aNotebook.notes?.count ?? 0) \(pageString)"
 
         return cell
     }
