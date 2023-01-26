@@ -17,11 +17,26 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    // continuation from minute 03:54, moving from "DataController.swift" to here ...
+    // 03:54 And at the top add a DataController property, and instantiate it right here, passing in the modelName "Mooskine", now move inside to func below i.e. applicationDidFinishlaunchingWithOptions
+    let dataController = DataController(modelName: "Mooskine")
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        // 04:03 Then in applicationDidFinishlaunchingWithOptions we'll call dataController.load and again we can use the trailing closure syntax i.e. adding {}
+        // 04:14 The completion block we provide here will get called once the persistent store is loaded. This gives us the space to display a loading interface while we wait for data to load and switch to the main UI only after the data has been loaded. But since we are not going to do that right now we can call the function just like this i.e. load(). And we are done. By writing our "DataController" class, instantiating it, and loading the store we now have a fully functional Core Data stack running in our app. Next we want our view controllers to start using this stack to fetch data. But first we need to get our code in a state where it builds, and runs.
+        dataController.load()
+        // MARK: 6. Injecting the DataController Dependency
+        // 00:59 Here in application did finish launching with options we have a chance to configure the first view although getting out that view is multi-step process, so bear with it.
+        // 01:09 To get to it, we'll need to talk to navigation controller, which is the "window?rootViewController" and will force downcast that to a navigation controller.
+        let navigationController = window?.rootViewController as! UINavigationController
+        // 01:21 That's half way there. The navigation controllers top view is the notebooks list. So we'll set "NotebooksListViewController" equal to navigationController.topViewController and force down cast that to a notebooksListViewController
+        let notebooksListViewController = navigationController.topViewController as! NotebooksListViewController
+        // 01:41 Finally we can set notebooksListViewController's data controller to the dataController property. This will inject the dataController dependency into notebooksListViewController. So now we can head back to "NotebooksListViewController.swift" and use it to load saved data into our app ... move there ... see line "var dataController: DataController! // newly inserted based on above comment
+        notebooksListViewController.dataController = dataController
         return true
+        
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
