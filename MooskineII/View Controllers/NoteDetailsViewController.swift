@@ -28,13 +28,8 @@ class NoteDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 00:47 In the viewDidLoad() we need to check if the note has a creation date before we can use it in the title. So I'll wrap this statement in an if let and change it to use the unwrapped creation date (see comment ****).
-
-        // navigationItem.title = dateFormatter.string(from: ((note.creationDate ?? Date()) as NSObject) as! Date) // error corrected thanks to Xcode suggestion, it shall work, still below code is as per lesson and above comment from 00:47:
         if let creationDate = note.creationDate {
-            navigationItem.title = dateFormatter.string(from: creationDate) // **** use the unwrapped creation date i.e. changed from note.creationDate to creationDate after .string(from: ...)
-            // 01:04 you may need to Product/Build again for the issues list to register this fix
-            // ok one (error) down, let's handle the other errors that have to do with optionals, move to line 125 of "NotebooksListViewController.swift" 01:52 ... 
+            navigationItem.title = dateFormatter.string(from: creationDate) 
         }
         
         
