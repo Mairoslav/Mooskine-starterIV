@@ -10,11 +10,14 @@ import UIKit
 import CoreData
 
 // 03:25 Scroll to the top of our file and in the class declaration, we will add NSFetchedResultsControllerDelegate conformance
-class NotebooksListViewController: UIViewController, UITableViewDataSource, NSFetchedResultsControllerDelegate {
+class NotebooksListViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
 
-    var notebooks: [Notebook] = []
+    // MARK: 8. Displaying Data
+    // 00:00 We have an instance of fetchedResultsController, and we understand how it's structured (see 'var fetchedResultsController: NSFetchedResultsController<Notebook>' in NotebooksListViewController.swift). Now let's update the table view so that we can actuallyh see the data. The key change is that we're going to get rid of the Notebooks array (comment out 'var notebooks: [Notebook] = []'). Previously we had to populate a maintenance array manually, but now the fetchedResultsController will keep track of Notebooks for us. Any code that used the Notebooks array before, will now use the fetchedResultsController instead. So let's delete the Notebooks property (comment out 'var notebooks: [Notebook] = []'). And it's gone.
+    // var notebooks: [Notebook] = []
+    // 00:37 (continuation of 8. Displaying Data) We won't have to manually reload Notebooks anymore either. So let's delete the call to reloadNotebooks in viewDidLoad. ...move there...
     
     var dataController: DataController!
     
@@ -61,7 +64,8 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource, NSFe
         // 04:15 Now, I don't really like leaving all this fetchedResultsController set up in viewDidLoad. So I am going to refactor it out into a separate setUpFetchedResultsController method (she selects all code described in above steps (now commented out)/Refactor/Extract Method/call it setUpFetchedResultsController). That's better.
         // 04:27 You may be thinking this code (3 copy-pasted lines) is duplicated in reloadNotebooks (from where it was copied), but we are about to change that. Now that we have a fetchedResultsController, we can swap it in as the data source for our table view and have the table view update itself when changes occur.
         
-        reloadNotebooks() // *basically content of this function had been before here
+        // 00:37 (continuation of 8. Displaying Data) We won't have to manually reload Notebooks anymore either. So let's delete the call to reloadNotebooks in viewDidLoad. In fact, we should delete the whole reloadNotebooks method, since we're no longer managing this data ourselves (move to reloadNotebooks method and comment it out, also its call in func addNotebook). 00:58 That's grat func addNotebooks is definitely getting narrower in scope. The next step is to update our data source methods, since those had previously used the NOtebooks array. Let's jump to the data source section (i.e. MARK; Table view data source). There are three functions we'll need to change. 1st let's replace a code in func numberOfSections. ...move there...
+        // reloadNotebooks() // *basically content of this function had been before here
         
     }
 
@@ -144,12 +148,13 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource, NSFe
         // 01:30 and the tasks for refreshing the tableView in the UI (see above again this comment, to see what lines it involves).
         
         // 02:20 and finally in 'addNotebook' we can replace these last three lines (now commented out, see TODOs: 1 - 3) with a call to our new method:
-        reloadNotebooks()
+        // reloadNotebooks()
         
         // 02:27 This will work, 'addNotebook' is much cleaner now. It only updates the model and calls out to reload notebooks to update the UI. But it's still not as clean as it could be. It would be better if the view just new to update when the context changed without having to be prompted here. The good news is that Core Data provides tools for reactging to data changes. Let's look into using a fetchedResults controller to do precisely this (see next lesson '4. NSFetchedResultsController').
         
     }
     
+    /*
     fileprivate func reloadNotebooks() {
         // 01:37 We also have some code for refreshing the UI in viewDidLoad (move there). And what's nice about the logic up here is the way it executes the fetchRequest before reloading the tableView. It doesn't have any insertion animations to give the user clues what content has changed but that's okay. Let's keep this simple for now, and we'll improve it later in the lesson.
         // 02:00 Let's pull this code out into its own function that we can call from both viewDidLoad() and addNotebook(). Choose below code / right click / Refactor / Extract Method. And we'll name it 'reloadNotebooks'.
@@ -166,12 +171,17 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource, NSFe
         }
         updateEditButtonState()
     }
-
+     */
+    // 02:38 We also use the Notebook at helper function in deleteNotebook
     func deleteNotebook(at indexPath: IndexPath) {
-        let notebookToDelete = notebook(at: indexPath)
+        // 02:43 We can update the notebookToDelete constant to use object at instead.
+        // let notebookToDelete = notebook(at: indexPath)
+        let notebookToDelete = fetchedResultsController.object(at: indexPath)
         dataController.viewContext.delete(notebookToDelete)
         try? dataController.viewContext.save()
         
+        // 02:47 While we are here, we can delete the second half of this method that deals with manually updating the UI (comment out below lines), since the fetchResultsController is going to handle that for us. // 03:00 Next, scroll down to prepare(for:sender:), ...move there...
+        /*
         notebooks.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .fade)
         
@@ -179,10 +189,17 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource, NSFe
             setEditing(false, animated: true)
         }
         updateEditButtonState()
+         */
     }
 
+    // 03:12 Last, the updateEditButtonState method has been using the NOtebooks array count to disable the edit button if there are no rows to edit. This should use the fetchedResultsController too.
     func updateEditButtonState() {
-        navigationItem.rightBarButtonItem?.isEnabled = numberOfNotebooks > 0
+        // 03:23 We'll conditionally unwrap the sectons array,
+        if let sections = fetchedResultsController.sections {
+            // then check the number of objects in the first and only section (commenting out the previous code below). // 03:36 Finally, since we are no longer using them, we can delete the notebook(at:) helper method, and the numberOfNotebooks computed property. ... move there to see they are now commented out ...
+            navigationItem.rightBarButtonItem?.isEnabled = sections[0].numberOfObjects > 0
+        }
+        // navigationItem.rightBarButtonItem?.isEnabled = numberOfNotebooks > 0
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -193,16 +210,37 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource, NSFe
     // -------------------------------------------------------------------------
     // MARK: - Table view data source
 
+    // 01:12 First, let's replace a code in func numberOfSections. We'll need to use the fetchedResultsController's sections property to find out how many secions the data has.
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        // return 1
+        // 01:23 The sections property is optional, so let's use optional binding.
+        /*
+        if let sections = fetchedResultsController.sections {
+            return sections.count
+        } else {
+            return 1
+        }
+         */
+        // 01:33 You can actually shorten this code using the coalescing operator to return the count if it exists, or one otherwise (so its alternative above we comment out).
+        return fetchedResultsController.sections?.count ?? 1 // this as shorthand of below code, check link below
+        // fetchedResultsController.sections?.count != nil ? fetchedResultsController.sections!.count : 1
+        // https://sarunw.com/posts/what-does-nil-coalescing-operator-means-in-swift/
+        
     }
 
+    // 01:43 Now, let's update tableView numberOfRowsInSection.
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfNotebooks
+        // return numberOfNotebooks
+        // 01:48 Again, we need to get the number of sections, so that we can refer to the specific section. Each section has a property name numberOfObjects. So we'll return numberOf Objects, otherwise, zero.
+        return fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
 
+    // 02:05 Finally, the last data source method we need to update is tableView cellForRowAt.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let aNotebook = notebook(at: indexPath)
+        // 02:10 In the existing version, we pass the indexPath to a helper method to get the right Notebook from the Notebooks array. We just need to switch this to get the Notebook from the fetchedResultsController instead. To do this we can feed the index path right into the fetchResultsController's object at function, so instead of below code that now commented out
+        // let aNotebook = notebook(at: indexPath)
+        // we write new one below. .object(at: ...) is generic, and will return an object typed to the result type of the fetchedResultsController, here, aNotebook (check it by option+click on .object). // 02:38 We also use the Notebook at helper function in deleteNotebook. ...move there...
+        let aNotebook = fetchedResultsController.object(at: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: NotebookCell.defaultReuseIdentifier, for: indexPath) as! NotebookCell
 
         cell.nameLabel.text = aNotebook.name
@@ -221,24 +259,42 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource, NSFe
         }
     }
 
+    // 03:36 Finally, since we are no longer using them, we can delete the notebook(at:) helper method, and the numberOfNotebooks computed property. And that's it. We've replaced our Notebooks array with the fetchedResultsController, and updated our tableView data source methods to get data from the fetchedResultsController instead. Now let's give it a try. Run the app in the simulator. We can see that we're still seeing all our Notebooks in the app. Yes. However, if we try to add a new Notebook, the new row still doesn't appear. We have to fix that. Let's look at how we can make the tableView automatically observe changes - see next lesson called '9. Tracking Changes'.
+    /*
     var numberOfNotebooks: Int { return notebooks.count }
 
     func notebook(at indexPath: IndexPath) -> Notebook {
         return notebooks[indexPath.row]
     }
+     */
 
     // -------------------------------------------------------------------------
     // MARK: - Navigation
 
+    // 03:00 Next, scroll down to prepare(for:sender:), where we pass the selected Notebook to the next viewController,
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? NotesListViewController {
             if let indexPath = tableView.indexPathForSelectedRow {
-                vc.notebook = notebook(at: indexPath)
+                // 03:06 and change this line to use the fetchedResultsControllers object at method too. // 03:12 Last, the updateEditButtonState method has been using ... move there ...
+                // vc.notebook = notebook(at: indexPath)
+                vc.notebook = fetchedResultsController.object(at: indexPath)
                 // MARK: NotebooksListViewController: pass `dataController`
                 // 00:25 Now, over in NotebooksListViewController (move there ...) we can pass the DataController instance in prepare for sender (b.ii).
                 // 00:38 Okay, great. So now, we pass both notebook and the CoreDataStack to the NotesList once a notebook is selected (b.iii). Move to 'NotesListViewController.swift' in viewDidLoad()... 
                 vc.dataController = dataController
             }
         }
+    }
+}
+
+// MARK: 9. Tracking Changes
+// 00:00 NotebookListViewController.swift is correctly using the fetchedResultsController to display data when the view loads. But the table is not yet updating when the data changes, for example, after the user adds a new notebook. Now, we know that fetchedResultsControllers can automaticaly track dataq model changes. So why isn't it working? Well, to take advantage of this, we need to implement the fetchedResultsControllers' delegate methods.
+
+// 00:31 We've alrady set up the delegate relationship as can see in line 'fetchedResultsController.delegate = self', and for that, we set up the class to conform to the NSFetchedResultsController delegate protocol. Let's move that conformance to an extension to keep this class organized. So we move 'NSFetchedResultsControllerDelegate' from place after the class declaration to extension down in file
+
+extension NotebooksListViewController: NSFetchedResultsControllerDelegate {
+    // 00:46 The most important method for us is controller(didChange:at:newIndexPath:), it's a little hard to find it but this is the comment you are looking for: "Notifies the receiver that a fetched object has been changed due to an add, remove, move, or update. And here it is. It is called whenever ...CONTINUE...
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        <#code#>
     }
 }
