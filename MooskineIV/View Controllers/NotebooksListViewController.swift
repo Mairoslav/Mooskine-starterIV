@@ -28,10 +28,21 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
     // 00:33 You could also instantiate it in 'viewWillAppear if you prefer. The important thing is to set up the 'fetchedResultsController' early, so that it's ready to present content to the user. Before we do that, though, for reasons related to notifications, we'll also need to tear down the fetchedResultsController when this view disappears.
     // 00:52 So, we'll override 'viewDidDisapper' called ... move down ...
     
-    fileprivate func setUpFetchedResultsController(_ fetchRequest: NSFetchRequest<Notebook>) {
+    fileprivate func setUpFetchedResultsController() {
+        // below 3 lines were actually also chosen when she did Refactoring, I did miss it so doing it after only now as correction
+        let fetchRequest: NSFetchRequest<Notebook> = Notebook.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
         // 02:02 Now, we can use this fetchRequest to instantiate the fetchedResultsController. The initializer takes several parameters. 1. We'll pass in the fetchRequest as the first parameter. 2. For the managedObjectContext, we'll use the dataController's viewContext. 3. and 4. And we'll use nil for both the sectionNameKeyPath and the cacheName for now.
         // 02:25 The keyPath could be used to split results into sections and display a title for each section, similarly to how contacts are grouped in the phone app. But since we want all the notebooks in a single section, will just leave this as nil. cacheName is also optional so, we'll set it to nil for now until we look into caching later.
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+        // MARK: 13. Caching
+        // 00:00 fetchedResultsControllers can avoid repetitive work byt caching section and ordering information. And in so doing, improved performance. When we created our fetched results controller, we left the cache name nil (see 'cacheName: nil'), which means that our fetched results controller will not use caching.
+        // 00:20 If we specify a name for a cache, caching will happen automatically and teh cache will persist between sessions. Let's enable it by settin a cache name of notebooks (i.e. 'cacheName = "notebooks"). The cache updates itself automatically when section or ordering informatio changes. If you have multiple fetched results controllers, then each should have their own cache with different names. For example, our 'NotesListWiewController.swift' should only show cached results if we're looking at the same notebook as the last time this view appeared. You don't want to cache only one notebook's notes. So we have to be careful how we implement the cache name there.
+        // 01:03 Also, if you ever change the fetch request and the fetched results controller, you should delete the cache manually first by calling the type method '.deleteCache(withName:).
+        // NSFetchedResultsController<Notebook>.deleteCache(withName: "notebooks")
+        // But we do not want to do that right now. In short, with caching, you can basically set it and forget it. We do not have big data in Mooskine, but caching is especially useful when you're working with large data sets. It helps your app load any table view the user has seen before, nearly instantaneously. You just have to turn it on (i.e. write 'cacheName = "notebooks")
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: dataController.viewContext, sectionNameKeyPath: nil, cacheName: /*nil*/ "notebooks")
+        // below continuation of 6. Adding a Fetched Results Controller:
         // 02:50 Finally, will call .performFetch() to load data and start tracking. performFetch throws if the fetchRequest can't be executed for some reason. So we'll wrap in a do catch block, and throw a fatalError if it fails.
         // *fetchedResultsController delegate property to self and that's it
         fetchedResultsController.delegate = self
@@ -48,12 +59,15 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
         navigationItem.rightBarButtonItem = editButtonItem
         
         // 01:37 (below trhee lines of code wer copy-pasted from fileprivate func reloadNotebooks()) One things to be aware of, generally, fetchRequests don't have to be sorted but any fetchRequest you use with a fetchResultsController must be sorted so that it has a consistent ordering.
-        // 01:52 We're alrady sorting this one by creationDate, so we do not need to change anything here.
+        // 01:52 We're alrady sorting this one by creationDate, so we do not need to change anything here(below 3 lines were actually also chosen when she did Refactoring, I did miss it so doing it after only now as correction):.
+        /*
         let fetchRequest: NSFetchRequest<Notebook> = Notebook.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
+        */
         
-        setUpFetchedResultsController(fetchRequest)
+        setUpFetchedResultsController()
+       
         // 03:03 There is one last step, fetchedResultsControllers track changes and to respond to those changes, we need to implement some delegate methods. We'll look at the delegtate in detail in a moment. But since it doesn't have any mandatory elements, let's go ahead and make our viewController conform.
         // 03:25 Scroll to the top of our file and in the class declaration, we will add NSFetchedResultsControllerDelegate conformance (see this comment also duplicated obove there).
         // 03:37 Now in viewDidLoad, above the do-try-catch statement, we'll set the *fetchedResultsControllerDelegate property to self and that's it. We now have a fetchedResultsController that loads and tracks data for us. The steps we took were:
@@ -293,8 +307,32 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
 // 00:31 We've alrady set up the delegate relationship as can see in line 'fetchedResultsController.delegate = self', and for that, we set up the class to conform to the NSFetchedResultsController delegate protocol. Let's move that conformance to an extension to keep this class organized. So we move 'NSFetchedResultsControllerDelegate' from place after the class declaration to extension down in file
 
 extension NotebooksListViewController: NSFetchedResultsControllerDelegate {
-    // 00:46 The most important method for us is controller(didChange:at:newIndexPath:), it's a little hard to find it but this is the comment you are looking for: "Notifies the receiver that a fetched object has been changed due to an add, remove, move, or update. And here it is. It is called whenever ...CONTINUE...
+    // 02:53 The controllerWillChangeContent method will get caled before a batch of updates.
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // 03:00 We can use that tol call .beginUpdates
+        tableView.beginUpdates()
+    }
+    
+    // 03:06 And there is a matching controllerDidChangeContent method that we'll use to call .endUpdates() on the tableView. And that's it. We now have a reactive table view that automatically responds to inserts and deletes. Let's try it out. Run the app in the simulator again and let's try adding a new notebook. I'll call this one Ideas. Great, it appears in the list with that smooth fade animation, and removing a notebook works too. This is pretty great. We have made our UI reactive while reducing the amount of code in our app. We removed the code that explicitly maintained a notebooks array and replaced it with the fetchedResultsController that now serves as the tableView's data source. We implemented the fetchResultsController's delegate methods to update the tableView when the data changes. Next, let's a quick look at how we could expand this code to support additional change types like update and move.
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.endUpdates()
+    }
+    
+    // 00:46 The most important method for us is controller(didChange:at:newIndexPath:), it's a little hard to find it but this is the comment you are looking for: "Notifies the receiver that a fetched object has been changed due to an add, remove, move, or update. And here it is. It is called whenever the fetch results controller receives the notification that an object has been added, deleted, or changed. When any of those events happen, the table view should update the affected rows.
+    // 01:20 The type of event is reflected in the 'for type' parameter. NSFetchedResultsChangeType is an enum that can be an insert, delete, update, or remove. In Mooskine, notebooks can only be added or deleted, so we only need to implement insert and delete.
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        <#code#>
+        // 01:39 We'll switch on the type parameter, and I'll put some break statements in her etemporarily to silence errors while we're working.
+        // 01:48 In the insert case, the newIndexPath parameter contains the IndexPath of the row to insert. So we can call the tableView's insertRows method passing the newIdexPath in and tellin it to face the insertion animation. Now, newIndexPath is optional so we have to unwrap it (i.e. have to write ! after newIndexPath), and insertRows accepts an array of rows so we'll make this a single element array (i.e. put newIndexPath! in [...] brackets). OK thats insert.
+        // 02:20 In the delete case, the indexPath parameter contains the indexPath of the row to delete. So we'll call tableView.deleteRows with that indexPath. Again, force unwrapping the indexPath and embedding it in array and specifying a fade animation. So that's delete.
+        // 02:44 Now, both of these table view changes need to be bookended between begin updates and end updates calls. Our fetchedResultsController has delegtate methods that we can use for this. So let's add those now.
+        // 02:53 The controllerWillChangeContent method will get caled before a batch of updates (write that func above func controller above ...). We can use that tol call ... move there to continue ...
+        switch type {
+            case .insert:
+                tableView.insertRows(at: [newIndexPath!], with: .fade)
+            case .delete:
+                tableView.deleteRows(at: [indexPath!], with: .fade)
+            default:
+                break
+        }
     }
 }
