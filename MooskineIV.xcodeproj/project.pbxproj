@@ -20,6 +20,9 @@
 		03B2699E1F2F8AAA00C7433C /* NotebookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B269951F2F837C00C7433C /* NotebookCell.swift */; };
 		03B2699F1F2F8AAA00C7433C /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B269961F2F837C00C7433C /* NoteCell.swift */; };
 		03B269A01F2F8AAD00C7433C /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B269981F2F837C00C7433C /* Cell.swift */; };
+		44550E4729A00A2600B6D71C /* UpdateToAttributedStrings.xcmappingmodel in Sources */ = {isa = PBXBuildFile; fileRef = 44550E4629A00A2600B6D71C /* UpdateToAttributedStrings.xcmappingmodel */; };
+		44550E4929A00B9800B6D71C /* UpdateToAttributedStringsPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44550E4829A00B9800B6D71C /* UpdateToAttributedStringsPolicy.swift */; };
+		44550E4B29A1509B00B6D71C /* Pathifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44550E4A29A1509B00B6D71C /* Pathifier.swift */; };
 		4465F341298B189F00406A69 /* Notebook+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465F340298B189F00406A69 /* Notebook+Extensions.swift */; };
 		4465F343298B1C9F00406A69 /* Note+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465F342298B1C9F00406A69 /* Note+Extension.swift */; };
 		44CF00912975DD8E003A469C /* mooskineDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 44CF008F2975DD8E003A469C /* mooskineDataModel.xcdatamodeld */; };
@@ -58,6 +61,10 @@
 		03B269951F2F837C00C7433C /* NotebookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookCell.swift; sourceTree = "<group>"; };
 		03B269961F2F837C00C7433C /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		03B269981F2F837C00C7433C /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		44550E45299D679900B6D71C /* MooskineIV-2023-02-15-attributedstring.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "MooskineIV-2023-02-15-attributedstring.xcdatamodel"; sourceTree = "<group>"; };
+		44550E4629A00A2600B6D71C /* UpdateToAttributedStrings.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = UpdateToAttributedStrings.xcmappingmodel; sourceTree = "<group>"; };
+		44550E4829A00B9800B6D71C /* UpdateToAttributedStringsPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateToAttributedStringsPolicy.swift; sourceTree = "<group>"; };
+		44550E4A29A1509B00B6D71C /* Pathifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pathifier.swift; sourceTree = "<group>"; };
 		4465F340298B189F00406A69 /* Notebook+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Notebook+Extensions.swift"; sourceTree = "<group>"; };
 		4465F342298B1C9F00406A69 /* Note+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Note+Extension.swift"; sourceTree = "<group>"; };
 		44CF00902975DD8E003A469C /* mooskineDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mooskineDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -156,6 +163,9 @@
 				44CF008F2975DD8E003A469C /* mooskineDataModel.xcdatamodeld */,
 				44CF0092297DC0ED003A469C /* Notebook+Extra.swift */,
 				44CF009429805836003A469C /* DataController.swift */,
+				44550E4629A00A2600B6D71C /* UpdateToAttributedStrings.xcmappingmodel */,
+				44550E4829A00B9800B6D71C /* UpdateToAttributedStringsPolicy.swift */,
+				44550E4A29A1509B00B6D71C /* Pathifier.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -255,7 +265,7 @@
 				TargetAttributes = {
 					039B10571EDC5469002EA94F = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = 8RNGB2AAZL;
+						DevelopmentTeam = BFXL43VVT7;
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
@@ -319,9 +329,12 @@
 				44CF009529805836003A469C /* DataController.swift in Sources */,
 				03B2699E1F2F8AAA00C7433C /* NotebookCell.swift in Sources */,
 				03B2699B1F2F8AA100C7433C /* NotebooksListViewController.swift in Sources */,
+				44550E4B29A1509B00B6D71C /* Pathifier.swift in Sources */,
 				03B2699A1F2F8A9C00C7433C /* Notebook.swift in Sources */,
+				44550E4729A00A2600B6D71C /* UpdateToAttributedStrings.xcmappingmodel in Sources */,
 				4465F343298B1C9F00406A69 /* Note+Extension.swift in Sources */,
 				03B2699C1F2F8AA100C7433C /* NoteDetailsViewController.swift in Sources */,
+				44550E4929A00B9800B6D71C /* UpdateToAttributedStringsPolicy.swift in Sources */,
 				03B269A01F2F8AAD00C7433C /* Cell.swift in Sources */,
 				44CF0093297DC0ED003A469C /* Notebook+Extra.swift in Sources */,
 				03B2699D1F2F8AA100C7433C /* NotesListViewController.swift in Sources */,
@@ -489,7 +502,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8RNGB2AAZL;
+				DEVELOPMENT_TEAM = BFXL43VVT7;
 				INFOPLIST_FILE = MooskineIV/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.udacity.MooskineII;
@@ -502,7 +515,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8RNGB2AAZL;
+				DEVELOPMENT_TEAM = BFXL43VVT7;
 				INFOPLIST_FILE = MooskineIV/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.udacity.MooskineII;
@@ -577,9 +590,10 @@
 		44CF008F2975DD8E003A469C /* mooskineDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				44550E45299D679900B6D71C /* MooskineIV-2023-02-15-attributedstring.xcdatamodel */,
 				44CF00902975DD8E003A469C /* mooskineDataModel.xcdatamodel */,
 			);
-			currentVersion = 44CF00902975DD8E003A469C /* mooskineDataModel.xcdatamodel */;
+			currentVersion = 44550E45299D679900B6D71C /* MooskineIV-2023-02-15-attributedstring.xcdatamodel */;
 			path = mooskineDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

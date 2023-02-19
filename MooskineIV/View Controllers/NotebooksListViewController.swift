@@ -236,6 +236,7 @@ class NotebooksListViewController: UIViewController, UITableViewDataSource {
         }
          */
         // 01:33 You can actually shorten this code using the coalescing operator to return the count if it exists, or one otherwise (so its alternative above we comment out).
+        setUpFetchedResultsController() // A quick workaround is to call again the `setUpFetchedResultsController()` method just before the return statement as per Q&A: 'Unexpectedly found nil while implicitly unwrapping an Optional value for 'fetchedResultsController.sections?'
         return fetchedResultsController.sections?.count ?? 1 // this as shorthand of below code, check link below
         // fetchedResultsController.sections?.count != nil ? fetchedResultsController.sections!.count : 1
         // https://sarunw.com/posts/what-does-nil-coalescing-operator-means-in-swift/

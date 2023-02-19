@@ -98,6 +98,8 @@ class NotesListViewController: UIViewController, UITableViewDataSource {
     // 3.e. addNote: remove the lines inserting the note into the notes array, inserting the note into the tableview an updating the edit button state
     func addNote() {
         let note = Note(context: dataController.viewContext)
+        // note.text = "New note"
+        note.attributedText = NSAttributedString(string: "New note")
         note.creationDate = Date()
         note.notebook = notebook
         try? dataController.viewContext.save()
@@ -156,7 +158,8 @@ class NotesListViewController: UIViewController, UITableViewDataSource {
         let aNote = fetchedResultsController.object(at: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: NoteCell.defaultReuseIdentifier, for: indexPath) as! NoteCell
 
-        cell.textPreviewLabel.text = aNote.text
+        // cell.textPreviewLabel.text = aNote.text
+        cell.textPreviewLabel.attributedText = aNote.attributedText
         if let creationDate = aNote.creationDate {
             cell.dateLabel.text = dateFormatter.string(from: /*aNote.*/creationDate)
         }
